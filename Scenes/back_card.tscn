@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/card.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Art/Pieces/BackCard.png" type="Texture" id=2]
+
+[node name="back_card" instance=ExtResource( 1 )]
+z_index = -1
+z_as_relative = false
+input_pickable = false
+color = "blank"
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource( 2 )
