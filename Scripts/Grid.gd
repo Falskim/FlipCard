@@ -6,26 +6,26 @@ export (int) var height
 export (int) var x_start
 export (int) var y_start
 export (int) var offset
-export (int) var card_size
 
 # Cards Array
-var back_card = preload("res://Scenes/back_card.tscn")
+var back_card = preload("res://Scenes/Card's Scene/back_card.tscn")
 var possible_cards = [
-preload("res://Scenes/black_card.tscn"),
-preload("res://Scenes/blue_card.tscn"),
-preload("res://Scenes/brown_card.tscn"),
-preload("res://Scenes/cream_card.tscn"),
-preload("res://Scenes/green_card.tscn"),
-preload("res://Scenes/grey_card.tscn"),
-preload("res://Scenes/orange_card.tscn"),
-preload("res://Scenes/pink_card.tscn"),
-preload("res://Scenes/purple_card.tscn"),
-preload("res://Scenes/red_card.tscn"),
-preload("res://Scenes/white_card.tscn"),
-preload("res://Scenes/yellow_card.tscn")
+preload("res://Scenes/Card's Scene/black_card.tscn"),
+preload("res://Scenes/Card's Scene/blue_card.tscn"),
+preload("res://Scenes/Card's Scene/brown_card.tscn"),
+preload("res://Scenes/Card's Scene/cream_card.tscn"),
+preload("res://Scenes/Card's Scene/green_card.tscn"),
+preload("res://Scenes/Card's Scene/grey_card.tscn"),
+preload("res://Scenes/Card's Scene/orange_card.tscn"),
+preload("res://Scenes/Card's Scene/pink_card.tscn"),
+preload("res://Scenes/Card's Scene/purple_card.tscn"),
+preload("res://Scenes/Card's Scene/red_card.tscn"),
+preload("res://Scenes/Card's Scene/white_card.tscn"),
+preload("res://Scenes/Card's Scene/yellow_card.tscn")
 ]
 
 var all_cards = []
+var back_cards = []
 
 # Touch Variables
 var mouse_position = Vector2(0, 0)
@@ -38,7 +38,9 @@ var check = false
 func _ready():
 	randomize()
 	all_cards = make_2d_array()
-	spawn_back_cards();
+	back_cards = make_2d_array()
+	spawn_back_cards()
+	print(back_cards)
 	spawn_cards()
 	print(all_cards)
 
@@ -76,6 +78,7 @@ func spawn_back_cards():
 			add_child(back)
 			back.position = grid_to_pixel(i, j)
 			all_cards[i][j] = back
+			back_cards[i][j] = back
 
 func same_card(color):
 	var same = 0
@@ -110,7 +113,7 @@ func touch_input():
 		var grid_position = pixel_to_grid(mouse_position.x, mouse_position.y)
 		var x_pos = grid_position.x
 		var y_pos = grid_position.y
-		if is_in_grid(x_pos, y_pos):
+		if (is_in_grid(x_pos, y_pos)):
 			print(grid_position)
 			touch_check(x_pos, y_pos)
 		else:
@@ -118,29 +121,29 @@ func touch_input():
 
 func touch_check(x, y):
 	if first_touch:
+		back_cards[x][y].queue_free()
 		first_card = all_cards[x][y]
 		print("first card = " + first_card.color)
 		first_touch = false
 	else:
+		back_cards[x][y].queue_free()
 		second_card = all_cards[x][y]
 		print("second card = " + second_card.color)
 		first_touch = true
 		check = true
 
 	if check:
-		if first_card.color == second_card.color:
-			first_card.queue_free()
-			second_card.queue_free()
-			check = false
-
-func destroy_matched():
-	pass
-
+		if first_card != second_card:
+			if first_card.color == second_card.color:
+				first_card.queue_free()
+				second_card.queue_free()
+				check = false
+			#else:
+			#	back_cards[first_card.x][first_card.y] = back_card.instance()
+			#	back_cards[second_card.x][second_card.y] = back_card.instance()
+			#	add_child(back_cards[first_card.x][first_card.y])
+			#	add_child(back_cards[second_card.x][second_card.y])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	touch_input()
-
-
-func _on_destroy_timer_timeout():
-	pass # Replace with function body.
