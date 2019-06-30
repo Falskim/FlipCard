@@ -32,6 +32,10 @@ var mouse_position = Vector2(0, 0)
 var first_touch = true
 var first_card = back_card
 var second_card = back_card
+var pos_x_1 = 0
+var pos_y_1 = 0
+var pos_x_2 = 0
+var pos_y_2 = 0
 var check = false
 
 # Called when the node enters the scene tree for the first time.
@@ -113,21 +117,27 @@ func touch_input():
 		var grid_position = pixel_to_grid(mouse_position.x, mouse_position.y)
 		var x_pos = grid_position.x
 		var y_pos = grid_position.y
-		if (is_in_grid(x_pos, y_pos)):
+		if (is_in_grid(x_pos, y_pos) && all_cards[x_pos][y_pos] != null):
 			print(grid_position)
 			touch_check(x_pos, y_pos)
 		else:
 			print("Not Found")
 
-func touch_check(x, y):
+func touch_check(x, y):	
 	if first_touch:
-		back_cards[x][y].queue_free()
+		#back_cards[x][y].queue_free()
 		first_card = all_cards[x][y]
+		pos_x_1 = x
+		pos_y_1 = y
+		
 		print("first card = " + first_card.color)
 		first_touch = false
 	else:
-		back_cards[x][y].queue_free()
+		#back_cards[x][y].queue_free()
 		second_card = all_cards[x][y]
+		pos_x_2 = x
+		pos_y_2 = y
+		
 		print("second card = " + second_card.color)
 		first_touch = true
 		check = true
@@ -136,13 +146,15 @@ func touch_check(x, y):
 		if first_card != second_card:
 			if first_card.color == second_card.color:
 				first_card.queue_free()
+				all_cards[pos_x_1][pos_y_2] = null
 				second_card.queue_free()
+				all_cards[pos_x_2][pos_y_2] = null
 				check = false
-			#else:
-			#	back_cards[first_card.x][first_card.y] = back_card.instance()
-			#	back_cards[second_card.x][second_card.y] = back_card.instance()
-			#	add_child(back_cards[first_card.x][first_card.y])
-			#	add_child(back_cards[second_card.x][second_card.y])
+			else:
+				#var back = back_card.instance()
+				#add_child(back)
+				#back.position = grid_to_pixel(pos_x_1, pos_y_1)
+				pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
