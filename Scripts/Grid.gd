@@ -125,7 +125,7 @@ func touch_input():
 
 func touch_check(x, y):	
 	if first_touch:
-		#back_cards[x][y].queue_free()
+		back_cards[x][y].queue_free()
 		first_card = all_cards[x][y]
 		pos_x_1 = x
 		pos_y_1 = y
@@ -133,7 +133,7 @@ func touch_check(x, y):
 		print("first card = " + first_card.color)
 		first_touch = false
 	else:
-		#back_cards[x][y].queue_free()
+		back_cards[x][y].queue_free()
 		second_card = all_cards[x][y]
 		pos_x_2 = x
 		pos_y_2 = y
@@ -151,9 +151,13 @@ func touch_check(x, y):
 				all_cards[pos_x_2][pos_y_2] = null
 				check = false
 			else:
-				#var back = back_card.instance()
-				#add_child(back)
-				#back.position = grid_to_pixel(pos_x_1, pos_y_1)
+				var back1 = back_card.instance()
+				add_child(back1)
+				back1.position = grid_to_pixel(pos_x_1, pos_y_1)
+				
+				var back2 = back_card.instance()
+				add_child(back2)
+				back2.position = grid_to_pixel(pos_x_2, pos_y_2)
 				pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
